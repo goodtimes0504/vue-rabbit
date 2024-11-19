@@ -7,6 +7,8 @@ import { ref, onMounted } from "vue"
 import { useRoute } from "vue-router"
 //导入热点榜组件
 import DetailHot from "./components/DetailHot.vue"
+//引入商品图片组件
+import ImageView from "@/components/ImageView/index.vue"
 //获取路由参数
 const route = useRoute()
 
@@ -52,7 +54,7 @@ onMounted(() => {
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-
+              <ImageView />
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
