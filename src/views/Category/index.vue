@@ -1,49 +1,17 @@
 <script setup>
-// 引入获取二级分类的api
-import { getCategoryAPI } from "@/apis/category"
-//引入vue的ref和onMounted
-import { ref, onMounted } from "vue"
-//引入useRoute获取路由参数
-import { useRoute } from "vue-router"
 //引入轮播图api
-import { getBannerApi } from "@/apis/home"
+// import { getBannerApi } from "@/apis/home"
 //引入GoodsItem组件
 import GoodsItem from "../Home/components/GoodsItem.vue"
-//引入路由导航守卫
-import { onBeforeRouteUpdate } from "vue-router"
 
-//获取路由参数
-const route = useRoute()
-//获取数据
-const categoryData = ref({})
-const getCategory = async (id = route.params.id) => {
-  const res = await getCategoryAPI(id)
-  categoryData.value = res.result
-}
-onMounted(() => {
-  return getCategory()
-})
-//希望 路由参数变化的时候可以把分类数据接口重新发送 而轮播图数据用缓存即可
-onBeforeRouteUpdate((to) => {
-  // console.log("路由变化了")
-  //重新获取数据 但是存在问题因为最新的路由参数没有获取到 所以得用to参数
-  // console.log(to)
-  getCategory(to.params.id)
-})
-
-//获取轮播图数据
-const bannerList = ref([])
-const getBanner = async () => {
-  const res = await getBannerApi({
-    distributionSite: "2",
-  })
-  // console.log(res)
-  bannerList.value = res.result
-}
-
-onMounted(() => {
-  return getBanner()
-})
+//引入封装好的轮播图相关函数
+import { useBanner } from "./composables/useBanner"
+//获取banner轮播图数据
+const { bannerList } = useBanner()
+//引入封装好的分类相关函数
+import { useCategory } from "./composables/useCategory"
+//获取分类数据
+const { categoryData } = useCategory()
 </script>
 
 <template>
