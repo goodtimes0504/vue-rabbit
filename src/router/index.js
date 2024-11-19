@@ -9,6 +9,8 @@ import Layout from "@/views/Layout/index.vue"
 import Home from "@/views/Home/index.vue"
 //引入Category组件
 import Category from "@/views/Category/index.vue"
+//引入二级分类组件
+import SubCategory from "@/views/SubCategory/index.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -26,6 +28,11 @@ const router = createRouter({
           path: "category/:id?",
           name: "category",
           component: Category,
+        },
+        {
+          path: "category/sub/:id?",
+          name: "subCategory",
+          component: SubCategory,
         },
       ],
     },
