@@ -14,8 +14,19 @@ export function getBannerApi() {
  * @param {*}
  * @return {*}
  */
-export const findNewAPI = () => {
+export function findNewAPI() {
   return httpInstance({
     url: "/home/new",
+  })
+}
+
+/**
+ * @description: 获取人气推荐
+ * @param {*}
+ * @return {*}
+ */
+export const getHotAPI = () => {
+  return httpInstance({
+    url: "/home/hot",
   })
 }
