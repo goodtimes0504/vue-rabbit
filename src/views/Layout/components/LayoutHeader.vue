@@ -1,20 +1,6 @@
 <script setup>
-//导入vue3的onMounted函数 ref响应式函数
-import { onMounted, ref } from "vue"
-//导入获取分类的接口
-import { getCategoryApi } from "@/apis/layout"
-//定义存储分类数据的响应式变量
-const categoryList = ref([])
-//定义获取分类数据函数
-const getCategory = async () => {
-  const res = await getCategoryApi()
-  // console.log(res)
-  categoryList.value = res.result
-}
-
-onMounted(() => {
-  getCategory()
-})
+import { useCategoryStore } from "@/stores/category"
+const categoryStore = useCategoryStore()
 </script>
 
 <template>
@@ -24,7 +10,11 @@ onMounted(() => {
         <RouterLink to="/">小兔鲜</RouterLink>
       </h1>
       <ul class="app-header-nav">
-        <li class="home" v-for="item in categoryList" :key="item.id">
+        <li
+          class="home"
+          v-for="item in categoryStore.categoryList"
+          :key="item.id"
+        >
           <RouterLink to="/">{{ item.name }}</RouterLink>
         </li>
       </ul>
