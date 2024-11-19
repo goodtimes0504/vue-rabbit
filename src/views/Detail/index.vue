@@ -5,6 +5,8 @@ import { getDetail } from "@/apis/detail"
 import { ref, onMounted } from "vue"
 //导入路由 获取路由参数
 import { useRoute } from "vue-router"
+//导入热点榜组件
+import DetailHot from "./components/DetailHot.vue"
 //获取路由参数
 const route = useRoute()
 
@@ -137,7 +139,12 @@ onMounted(() => {
               </div>
             </div>
             <!-- 24热榜+专题推荐 -->
-            <div class="goods-aside"></div>
+            <div class="goods-aside">
+              <!-- 24小时热榜 -->
+              <DetailHot></DetailHot>
+              <!-- 周热榜 -->
+              <DetailHot></DetailHot>
+            </div>
           </div>
         </div>
       </div>
