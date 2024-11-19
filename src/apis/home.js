@@ -2,10 +2,15 @@ import httpInstance from "@/utils/http"
 
 //获取banner轮播图
 
-export function getBannerApi() {
+export function getBannerApi(params = {}) {
+  //distributionSite 默认是1 商品是2
+  const { distributionSite = "1" } = params
   return httpInstance({
     url: "/home/banner",
     method: "get",
+    params: {
+      distributionSite,
+    },
   })
 }
 
