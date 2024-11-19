@@ -1,4 +1,21 @@
 <script setup>
+//引入ref和onMounted
+import { ref, onMounted } from "vue"
+//引入封装好的获取二级分类列表数据的api
+import { getCategoryFilterAPI } from "@/apis/category"
+//引入获取路由参数的函数
+import { useRoute } from "vue-router"
+
+//获取面包屑导航数据
+const route = useRoute()
+const categoryData = ref({})
+const getCategoryData = async () => {
+  const res = await getCategoryFilterAPI(route.params.id)
+  categoryData.value = res.result
+}
+onMounted(() => {
+  return getCategoryData()
+})
 </script>
 
 <template>
@@ -7,8 +24,10 @@
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/' }">居家 </el-breadcrumb-item>
-        <el-breadcrumb-item>居家生活用品</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: `/category/${categoryData.parentId}` }"
+          >{{ categoryData.parentName }}
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>{{ categoryData.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="sub-container">
