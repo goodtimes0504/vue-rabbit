@@ -39,6 +39,26 @@ const getGoodList = async () => {
 onMounted(() => {
   return getGoodList()
 })
+//tab切换回调函数
+const tabChange = () => {
+  //因为el-tabs v-model绑定了reqData.sortField 所以reqData.sortField的值会随着tab的切换而改变
+  //所以直接调用getGoodList函数即可 但是别忘了把reqData.page重置为1
+  reqData.value.page = 1
+  getGoodList()
+}
+//加载更多
+const disabled = ref(false)
+const load = async () => {
+  //   console.log("加载更多数据")
+  //获取下一页数据
+  reqData.value.page++
+  const res = await getSubCategoryAPI(reqData.value)
+  goodList.value = [...goodList.value, ...res.result.items]
+  //判断是否还有下一页 没有的话就停止加载
+  if (res.result.items.length === 0) {
+    disabled.value = true
+  }
+}
 </script>
 
 <template>
@@ -54,12 +74,17 @@ onMounted(() => {
       </el-breadcrumb>
     </div>
     <div class="sub-container">
-      <el-tabs>
+      <el-tabs v-model="reqData.sortField" @tab-change="tabChange">
         <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body">
+      <div
+        class="body"
+        v-infinite-scroll="load"
+        :infinite-scroll-disabled="disabled"
+        infinite-scroll-distance="100"
+      >
         <!-- 商品列表-->
         <GoodsItem v-for="good in goodList" :key="good.id" :good="good" />
       </div>
