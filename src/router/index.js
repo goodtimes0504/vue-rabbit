@@ -11,6 +11,8 @@ import Home from "@/views/Home/index.vue"
 import Category from "@/views/Category/index.vue"
 //引入二级分类组件
 import SubCategory from "@/views/SubCategory/index.vue"
+//导入商品详情组件
+import Detail from "@/views/Detail/index.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -34,6 +36,11 @@ const router = createRouter({
           name: "subCategory",
           component: SubCategory,
         },
+        {
+          path: "detail/:id?",
+          name: "detail",
+          component: Detail,
+        },
       ],
     },
     {
@@ -42,6 +49,13 @@ const router = createRouter({
       component: Login,
     },
   ],
+  ///路由跳转滚动条置顶
+  scrollBehavior() {
+    return {
+      left: 0,
+      top: 0,
+    }
+  },
 })
 
 export default router
