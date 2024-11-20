@@ -1,6 +1,8 @@
 <script setup>
 //导入购物车pinia
 import { useCartStore } from "@/stores/cartStore"
+import { useRouter } from "vue-router"
+const router = useRouter()
 //获取购物车数据
 const cartStore = useCartStore()
 //单选回调函数
@@ -102,7 +104,12 @@ const allCheck = (selected) => {
           <span class="red">¥ {{ cartStore.selectedPrice.toFixed(2) }} </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary">下单结算</el-button>
+          <el-button
+            size="large"
+            type="primary"
+            @click="$router.push('/checkout')"
+            >下单结算</el-button
+          >
         </div>
       </div>
     </div>

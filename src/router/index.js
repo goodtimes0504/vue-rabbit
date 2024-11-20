@@ -15,6 +15,8 @@ import SubCategory from "@/views/SubCategory/index.vue"
 import Detail from "@/views/Detail/index.vue"
 //导入购物车结算列表组件
 import CartList from "@/views/CartList/index.vue"
+//导入订单结算组件
+import Checkout from "@/views/Checkout/index.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -47,6 +49,11 @@ const router = createRouter({
           path: "cartList",
           name: "cartList",
           component: CartList,
+        },
+        {
+          path: "checkout",
+          name: "checkout",
+          component: Checkout,
         },
       ],
     },
