@@ -5,6 +5,7 @@ import { ref } from "vue"
 const form = ref({
   account: "", //账号
   password: "", //密码
+  agree: false, //协议
 })
 //校验规则
 const rules = {
@@ -22,6 +23,19 @@ const rules = {
       pattern: /^[a-zA-Z0-9]{6,14}$/,
       message: "请输入6-14个数字或字符",
       trigger: "blur",
+    },
+  ],
+  // agree: [{ required: true, message: "请同意协议", trigger: "change" }],
+  agree: [
+    {
+      validator: (rule, value, callback) => {
+        if (value) {
+          callback()
+        } else {
+          callback(new Error("请同意协议"))
+        }
+      },
+      trigger: "change",
     },
   ],
 }
@@ -62,8 +76,8 @@ const rules = {
               <el-form-item prop="password" label="密码">
                 <el-input v-model="form.password" />
               </el-form-item>
-              <el-form-item label-width="22px">
-                <el-checkbox size="large">
+              <el-form-item prop="agree" label-width="22px">
+                <el-checkbox size="large" v-model="form.agree">
                   我已同意隐私条款和服务条款
                 </el-checkbox>
               </el-form-item>
