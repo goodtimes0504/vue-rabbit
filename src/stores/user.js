@@ -12,6 +12,10 @@ export const useUserStore = defineStore(
       const result = await loginAPI(data)
       userInfo.value = result.result
     }
+    //退出时清除用户信息
+    const clearUserInfo = () => {
+      userInfo.value = {}
+    }
     //   //定义getters
     //   const isLogin = computed(() => {
     //     return !!user.value
@@ -19,6 +23,7 @@ export const useUserStore = defineStore(
     return {
       userInfo,
       getUserInfo,
+      clearUserInfo,
       // isLogin,
     }
   },
