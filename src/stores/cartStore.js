@@ -17,9 +17,15 @@ export const useCartStore = defineStore(
         cartList.value.push(goods)
       }
     }
+    //定义action-delCart
+    const delCart = (skuId) => {
+      //删除购物车思路 1找到删除项的下标值 然后splice(index,1)删除 2.直接使用filter过滤掉
+      cartList.value = cartList.value.filter((item) => item.skuId !== skuId)
+    }
     return {
       cartList,
       addCart,
+      delCart,
     }
   },
   {
