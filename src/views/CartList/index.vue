@@ -8,6 +8,11 @@ const singleCheck = (i, selected) => {
   //需要补充一个参数 skuId
   cartStore.singleCheck(i.skuId, selected)
 }
+//全选回调函数
+const allCheck = (selected) => {
+  //把cartList中的所有商品都设置为当前的全选框状态
+  cartStore.allCheck(selected)
+}
 </script>
 
 <template>
@@ -18,7 +23,11 @@ const singleCheck = (i, selected) => {
           <thead>
             <tr>
               <th width="120">
-                <el-checkbox />
+                <!-- 全选框 -->
+                <el-checkbox
+                  :model-value="cartStore.isAll"
+                  @change="allCheck"
+                />
               </th>
               <th width="400">商品信息</th>
               <th width="220">单价</th>

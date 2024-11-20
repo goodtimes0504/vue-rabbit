@@ -24,12 +24,25 @@ export const useCartStore = defineStore(
     }
     //定义action- singleCheck
     const singleCheck = (skuId, selected) => {
-      //单选思路 1找到当前项 然后修改checked属性 2.直接使用map遍历修改
-      cartList.value = cartList.value.map((item) => {
+      //单选思路 1找到当前项 然后修改checked属性 2.直接使用map或者forEach遍历修改
+      //   cartList.value = cartList.value.map((item) => {
+      //     if (item.skuId === skuId) {
+      //       item.selected = selected
+      //     }
+      //     return item
+      //   })
+      //   方法2
+      cartList.value.forEach((item) => {
         if (item.skuId === skuId) {
           item.selected = selected
         }
-        return item
+      })
+    }
+    //定义action- allCheck
+    const allCheck = (selected) => {
+      //把cartList的每一项的selected都改为传过来的selected
+      cartList.value.forEach((item) => {
+        item.selected = selected
       })
     }
     //计算属性 总数是所有项的count之和 总价是所有项的count*price之和
@@ -43,13 +56,20 @@ export const useCartStore = defineStore(
         return sum + item.count * item.price
       }, 0)
     })
+    //计算属性 是否全选
+    const isAll = computed(() => {
+      return cartList.value.every((item) => item.selected)
+    })
     return {
+      //暴露出去
       cartList,
       addCart,
       delCart,
       total,
       totalPrice,
-      singleCheck, //暴露出去
+      singleCheck,
+      isAll,
+      allCheck,
     }
   },
   {
