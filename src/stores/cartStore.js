@@ -1,20 +1,37 @@
 //封装购物车模块
 import { defineStore } from "pinia"
 import { ref, computed } from "vue"
+import { useUserStore } from "./user"
+import { insertCartApi, findNewCartListApi } from "@/apis/cart"
 export const useCartStore = defineStore(
   "cart",
   () => {
+    //定义state -userStore
+    const userStore = useUserStore()
+    const isLogin = computed(() => {
+      return !!userStore.userInfo.token
+    })
     //定义state -cartList
     const cartList = ref([])
     //定义action -addCart
-    const addCart = (goods) => {
-      //添加购物车操作 已经添加过的话count+1 没添加过的话 push进去
-      //思路是匹配传过来的商品对象中的skuId 是否在cartList购物车列表中存在
-      const item = cartList.value.find((item) => item.skuId === goods.skuId)
-      if (item) {
-        item.count += goods.count
+    const addCart = async (goods) => {
+      if (isLogin.value) {
+        //登陆后的加入购物车的逻辑 调用加入购物车接口 然后从云端拉取最新的购物车列表 覆盖本地的购物车列表
+        const { skuId, count } = goods
+        await insertCartApi({ skuId, count })
+        //重新获取购物车列表
+        const res = await findNewCartListApi()
+        cartList.value = res.result
       } else {
-        cartList.value.push(goods)
+        //未登录的加入购物车的逻辑
+        //添加购物车操作 已经添加过的话count+1 没添加过的话 push进去
+        //思路是匹配传过来的商品对象中的skuId 是否在cartList购物车列表中存在
+        const item = cartList.value.find((item) => item.skuId === goods.skuId)
+        if (item) {
+          item.count += goods.count
+        } else {
+          cartList.value.push(goods)
+        }
       }
     }
     //定义action-delCart
