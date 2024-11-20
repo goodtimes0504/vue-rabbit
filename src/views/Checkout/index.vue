@@ -1,6 +1,7 @@
 <script setup>
 //导入获取订单详情接口
 import { getCheckoutAPI } from "@/apis/checkout"
+import { ElMessage } from "element-plus"
 import { ref, onMounted } from "vue"
 const checkInfo = ref({}) // 订单对象
 const curAddress = ref({}) // 默认地址
@@ -17,6 +18,17 @@ onMounted(() => {
 })
 //控制弹窗打开
 const showDialog = ref(false)
+//切换地址回调函数
+const activeAddress = ref({})
+const switchAddress = (item) => {
+  activeAddress.value = item
+}
+//切换地址确认按钮回调函数
+const confirm = () => {
+  curAddress.value = activeAddress.value
+  showDialog.value = false
+  ElMessage.success("切换地址成功")
+}
 </script>
 
 <template>
@@ -136,7 +148,9 @@ const showDialog = ref(false)
     <div class="addressWrapper">
       <div
         class="text item"
+        :class="{ active: item.id === activeAddress.id }"
         v-for="item in checkInfo.userAddresses"
+        @click="switchAddress(item)"
         :key="item.id"
       >
         <ul>
@@ -150,8 +164,8 @@ const showDialog = ref(false)
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button>取消</el-button>
-        <el-button type="primary">确定</el-button>
+        <el-button @click="showDialog = false">取消</el-button>
+        <el-button type="primary" @click="confirm">确定</el-button>
       </span>
     </template>
   </el-dialog>
