@@ -1,6 +1,11 @@
 <script setup>
 //导入购物车数据管理的store
 import { useCartStore } from "@/stores/cartStore"
+//导入router
+import { useRouter } from "vue-router"
+//获取router实例
+const router = useRouter()
+
 //获取购物车数据
 const cartStore = useCartStore()
 </script>
@@ -37,7 +42,12 @@ const cartStore = useCartStore()
           <p>共 {{ cartStore.total }} 件商品</p>
           <p>&yen; {{ cartStore.totalPrice.toFixed(2) }}</p>
         </div>
-        <el-button size="large" type="primary">去购物车结算</el-button>
+        <el-button
+          size="large"
+          type="primary"
+          @click="$router.push('/cartlist')"
+          >去购物车结算</el-button
+        >
       </div>
     </div>
   </div>
