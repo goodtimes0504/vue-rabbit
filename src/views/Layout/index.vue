@@ -8,7 +8,7 @@ import LayoutFooter from "../Layout/components/LayoutFooter.vue"
 import LayoutFixed from "../Layout/components/LayoutFixed.vue"
 
 //触发获取导航列表的action
-import { useCategoryStore } from "@/stores/category"
+import { useCategoryStore } from "@/stores/categoryStore"
 const categoryStore = useCategoryStore()
 onMounted(() => {
   return categoryStore.getCategory()

@@ -1,8 +1,8 @@
 //封装购物车模块
 import { defineStore } from "pinia"
-import { ref, computed } from "vue"
-import { useUserStore } from "./user"
-import { insertCartApi, findNewCartListApi } from "@/apis/cart"
+import { ref, computed, nextTick } from "vue"
+import { useUserStore } from "./userStore"
+import { insertCartApi, findNewCartListApi, delCartApi } from "@/apis/cart"
 export const useCartStore = defineStore(
   "cart",
   () => {
@@ -20,8 +20,11 @@ export const useCartStore = defineStore(
         const { skuId, count } = goods
         await insertCartApi({ skuId, count })
         //重新获取购物车列表
-        const res = await findNewCartListApi()
-        cartList.value = res.result
+        //这里有bug 有可能会获取不到最新的购物车列表 所以需要使用nextTick 等待后端更新完毕再获取最新的购物车列表才可以
+        //bug原理是 删除请求成功了 但是后端还没有更新完毕 所以不加nextTick获取到的数据可能是未更新的 所以这里使用nextTick 等待后端更新完毕再获取最新的购物车列表才可以
+        nextTick(async () => {
+          updateNewList()
+        })
       } else {
         //未登录的加入购物车的逻辑
         //添加购物车操作 已经添加过的话count+1 没添加过的话 push进去
@@ -35,10 +38,25 @@ export const useCartStore = defineStore(
       }
     }
     //定义action-delCart
-    const delCart = (skuId) => {
-      //删除购物车思路 1找到删除项的下标值 然后splice(index,1)删除 2.直接使用filter过滤掉
-      cartList.value = cartList.value.filter((item) => item.skuId !== skuId)
+    const delCart = async (skuId) => {
+      if (isLogin.value) {
+        //登陆后的删除购物车的逻辑 调用删除购物车接口 然后从云端拉取最新的购物车列表 覆盖本地的购物车列表
+        await delCartApi([skuId])
+        //重新获取购物车列表
+        nextTick(async () => {
+          updateNewList()
+        })
+      } else {
+        //删除购物车思路 1找到删除项的下标值 然后splice(index,1)删除 2.直接使用filter过滤掉
+        cartList.value = cartList.value.filter((item) => item.skuId !== skuId)
+      }
     }
+    //封装一个获取最新购物车列表的action
+    const updateNewList = async () => {
+      const res = await findNewCartListApi()
+      cartList.value = res.result
+    }
+
     //定义action- singleCheck
     const singleCheck = (skuId, selected) => {
       //单选思路 1找到当前项 然后修改checked属性 2.直接使用map或者forEach遍历修改

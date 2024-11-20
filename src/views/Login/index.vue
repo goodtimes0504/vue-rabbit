@@ -6,7 +6,7 @@ import { ElMessage } from "element-plus"
 import "element-plus/theme-chalk/el-message.css"
 
 //导入状态管理
-import { useUserStore } from "@/stores/user"
+import { useUserStore } from "@/stores/userStore"
 const userStore = useUserStore()
 //表单校验 账号 密码 协议
 //准备表单对象
