@@ -3,7 +3,11 @@
 import { useCartStore } from "@/stores/cartStore"
 //获取购物车数据
 const cartStore = useCartStore()
-const cartList = []
+//单选回调函数
+const singleCheck = (i, selected) => {
+  //需要补充一个参数 skuId
+  cartStore.singleCheck(i.skuId, selected)
+}
 </script>
 
 <template>
@@ -27,7 +31,11 @@ const cartList = []
           <tbody>
             <tr v-for="i in cartStore.cartList" :key="i.id">
               <td>
-                <el-checkbox />
+                <!-- 单选框 -->
+                <el-checkbox
+                  :model-value="i.selected"
+                  @change="(selected) => singleCheck(i, selected)"
+                />
               </td>
               <td>
                 <div class="goods">

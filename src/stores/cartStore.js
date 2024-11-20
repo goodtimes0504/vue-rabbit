@@ -22,6 +22,16 @@ export const useCartStore = defineStore(
       //删除购物车思路 1找到删除项的下标值 然后splice(index,1)删除 2.直接使用filter过滤掉
       cartList.value = cartList.value.filter((item) => item.skuId !== skuId)
     }
+    //定义action- singleCheck
+    const singleCheck = (skuId, selected) => {
+      //单选思路 1找到当前项 然后修改checked属性 2.直接使用map遍历修改
+      cartList.value = cartList.value.map((item) => {
+        if (item.skuId === skuId) {
+          item.selected = selected
+        }
+        return item
+      })
+    }
     //计算属性 总数是所有项的count之和 总价是所有项的count*price之和
     const total = computed(() => {
       return cartList.value.reduce((sum, item) => {
@@ -39,6 +49,7 @@ export const useCartStore = defineStore(
       delCart,
       total,
       totalPrice,
+      singleCheck, //暴露出去
     }
   },
   {
