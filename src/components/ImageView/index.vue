@@ -21,8 +21,13 @@ const { elementX, elementY, isOutside } = useMouseInElement(target)
 //控制滑块跟随鼠标移动 （监听elementx和elementy的变化 一旦变化重新设置left/top）
 const left = ref(0)
 const top = ref(0)
-watch([elementX, elementY], () => {
+//大图坐标
+const positionX = ref(0)
+const positionY = ref(0)
+watch([elementX, elementY, isOutside], () => {
+  //如果鼠标没有移入到盒子里面 直接不执行后面的逻辑
   if (isOutside.value) return
+  console.log("后续逻辑执行了")
   //计算滑块的位置 （鼠标位置-滑块一半）
   // left.value = Math.max(0, Math.min(elementX.value - 100, 200))
   // top.value = Math.max(0, Math.min(elementY.value - 100, 200))
@@ -51,6 +56,9 @@ watch([elementX, elementY], () => {
   if (elementY.value > 300) {
     top.value = 200
   }
+  //控制大图显示
+  positionX.value = -left.value * 2
+  positionY.value = -top.value * 2
 })
 </script>
 
@@ -80,12 +88,12 @@ watch([elementX, elementY], () => {
       class="large"
       :style="[
         {
-          backgroundImage: `url(${imageList[0]})`,
-          backgroundPositionX: `0px`,
-          backgroundPositionY: `0px`,
+          backgroundImage: `url(${imageList[activeIndex]})`,
+          backgroundPositionX: `${positionX}px`,
+          backgroundPositionY: `${positionY}px`,
         },
       ]"
-      v-show="false"
+      v-show="!isOutside"
     ></div>
   </div>
 </template>
