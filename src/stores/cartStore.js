@@ -60,6 +60,18 @@ export const useCartStore = defineStore(
     const isAll = computed(() => {
       return cartList.value.every((item) => item.selected)
     })
+    //计算属性 已选择的数量和总价
+    const selectedCount = computed(() => {
+      return cartList.value.reduce((sum, item) => {
+        return sum + (item.selected ? item.count : 0)
+      }, 0)
+    })
+    const selectedPrice = computed(() => {
+      return cartList.value.reduce((sum, item) => {
+        return sum + (item.selected ? item.count * item.price : 0)
+      }, 0)
+      //上面一定要记得写上第二个参数 0！！！！！！不然 sum是undefined 会报错
+    })
     return {
       //暴露出去
       cartList,
@@ -70,6 +82,8 @@ export const useCartStore = defineStore(
       singleCheck,
       isAll,
       allCheck,
+      selectedCount,
+      selectedPrice,
     }
   },
   {
