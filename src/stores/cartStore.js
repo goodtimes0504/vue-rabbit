@@ -56,6 +56,10 @@ export const useCartStore = defineStore(
       const res = await findNewCartListApi()
       cartList.value = res.result
     }
+    //清除购物车
+    const clearCart = async () => {
+      cartList.value = []
+    }
 
     //定义action- singleCheck
     const singleCheck = (skuId, selected) => {
@@ -119,6 +123,7 @@ export const useCartStore = defineStore(
       allCheck,
       selectedCount,
       selectedPrice,
+      clearCart,
     }
   },
   {
