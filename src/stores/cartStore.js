@@ -1,6 +1,6 @@
 //封装购物车模块
 import { defineStore } from "pinia"
-import { ref } from "vue"
+import { ref, computed } from "vue"
 export const useCartStore = defineStore(
   "cart",
   () => {
@@ -22,10 +22,23 @@ export const useCartStore = defineStore(
       //删除购物车思路 1找到删除项的下标值 然后splice(index,1)删除 2.直接使用filter过滤掉
       cartList.value = cartList.value.filter((item) => item.skuId !== skuId)
     }
+    //计算属性 总数是所有项的count之和 总价是所有项的count*price之和
+    const total = computed(() => {
+      return cartList.value.reduce((sum, item) => {
+        return sum + item.count
+      }, 0)
+    })
+    const totalPrice = computed(() => {
+      return cartList.value.reduce((sum, item) => {
+        return sum + item.count * item.price
+      }, 0)
+    })
     return {
       cartList,
       addCart,
       delCart,
+      total,
+      totalPrice,
     }
   },
   {
