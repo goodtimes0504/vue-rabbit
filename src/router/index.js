@@ -17,6 +17,8 @@ import Detail from "@/views/Detail/index.vue"
 import CartList from "@/views/CartList/index.vue"
 //导入订单结算组件
 import Checkout from "@/views/Checkout/index.vue"
+//导入订单结算组件
+import Pay from "@/views/Pay/index.vue"
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -54,6 +56,11 @@ const router = createRouter({
           path: "checkout",
           name: "checkout",
           component: Checkout,
+        },
+        {
+          path: "pay",
+          name: "pay",
+          component: Pay,
         },
       ],
     },
